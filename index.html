@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang = "ru">
+    <head>
+        <meta charset = "utf-8">
+        <title>Операции с множествами</title>
+        <script type = "text/javascript">
+            function isLetter(c)
+            {
+                if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')
+                {
+                    return true;
+                }
+                if (c >= 'а' && c <= 'я' || c >= 'А' && c <= 'Я' || c == 'ё' || c == 'Ё')
+                {
+                    return true;
+                }
+                return false;
+            }
+            
+            function removeSpaces(arr)
+            {
+                var i = 0;
+                while (i < arr.length)
+                {
+                    if (arr[i] == "")
+                    {
+                        arr.splice(i, 1);
+                    } else
+                    {
+                        i++;
+                    }
+                }
+            }
+            
+            function removeRepeats(arr)
+            {
+                var i = 0;
+                while ( i < arr.length)
+                {
+                    var j = i + 1;
+                    while (j < arr.length)
+                    {
+                        if (arr[j] == arr[i])
+                        {
+                            arr.splice(j, 1);
+                        } else
+                        {
+                            j++;
+                        }
+                    }
+                    i++;
+                }
+            }
+            
+            function validate(arr1, arr2)
+            {
+                removeSpaces(arr1);
+                for (var i = 0; i < arr1.length; i++)
+                {
+                    if (arr1[i].length != 4)
+                    {
+                        return false;
+                    }
+                    if (!isLetter(arr1[i][0]))
+                    {
+                        return false;
+                    }
+                    for (var j = 1; j < 4; j++)
+                    {
+                        if (arr1[i][j] < '0' || arr1[i][j] > '9')
+                        {
+                            return false;
+                        }
+                    }
+                    if ((arr1[i][3] - '0') % 2 == 0)
+                    {
+                        return false;
+                    }
+                }
+                removeSpaces(arr2);
+                for (var i = 0; i < arr2.length; i++)
+                {
+                    if (arr2[i].length != 4)
+                    {
+                        return false;
+                    }
+                    if (!isLetter(arr2[i][0]))
+                    {
+                        return false;
+                    }
+                    for (var j = 1; j < 4; j++)
+                    {
+                        if (arr2[i][j] < '0' || arr2[i][j] > '9')
+                        {
+                            return false;
+                        }
+                    }
+                    if ((arr2[i][3] - '0') % 2 == 0)
+                    {
+                        return false;
+                    }
+                }
+                removeRepeats(arr1);
+                removeRepeats(arr2);
+                return true;
+            }
+            
+            function union(str1, str2)
+            {
+                var arr1 = str1.split(' ');
+                var arr2 = str2.split(' ');
+                if (!validate(arr1, arr2))
+                {
+                    document.getElementById("result").innerHTML = "Неправильный формат данных!";                    
+                    return;                    
+                }
+                var arr3 = [];
+                for (var i = 0; i < arr1.length; i++)
+                {
+                    arr3.push(arr1[i]);
+                }
+                for (var i = 0; i < arr2.length; i++)
+                {
+                    flag = true;
+                    for(var j = 0; j < arr1.length; j++)
+                    {
+                        if (arr1[j] == arr2[i])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        arr3.push(arr2[i]);
+                    }
+                }
+                if (arr3.length == 0)
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br> Пустое множество";
+                } else
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br>" + arr3.join(", ");
+                }
+            }
+            
+            function intersection(str1, str2)
+            {                
+                var arr1 = str1.split(' ');
+                var arr2 = str2.split(' ');
+                if (!validate(arr1, arr2))
+                {
+                    document.getElementById("result").innerHTML = "Неправильный формат данных!";
+                    return;                    
+                }
+                var arr3 = [];
+                for (var i = 0; i < arr1.length; i++)
+                {
+                    for (var j = 0; j < arr2.length; j++)
+                    {
+                        if (arr2[j] == arr1[i])
+                        {
+                            arr3.push(arr1[i]);
+                            break;
+                        }
+                    }
+                }
+                if (arr3.length == 0)
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br> Пустое множество";
+                } else
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br>" + arr3.join(", ");
+                }
+            }
+            
+            function difference(str1, str2)
+            {
+                var arr1 = str1.split(' ');
+                var arr2 = str2.split(' ');
+                if (!validate(arr1, arr2))
+                {
+                    document.getElementById("result").innerHTML = "Неправильный формат данных!";
+                    return;                    
+                }
+                arr3 = [];
+                for (var i = 0; i < arr1.length; i++)
+                {
+                    flag = true;
+                    for (var j = 0; j < arr2.length; j++)
+                    {
+                        if (arr2[j] == arr1[i])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        arr3.push(arr1[i]);
+                    }
+                }
+                if (arr3.length == 0)
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br> Пустое множество";
+                } else
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br>" + arr3.join(", ");
+                }
+            }
+            
+            function symmetric(str1, str2)
+            {
+                var arr1 = str1.split(' ');
+                var arr2 = str2.split(' ');
+                if (!validate(arr1, arr2))
+                {
+                    document.getElementById("result").innerHTML = "Неправильный формат данных!";
+                    return;                    
+                }
+                var arr3 = [];
+                for (var i = 0; i < arr1.length; i++)
+                {
+                    flag = true;
+                    for(var j = 0; j < arr2.length; j++)
+                    {
+                        if (arr2[j] == arr1[i])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        arr3.push(arr1[i]);
+                    }
+                }
+                for (var i = 0; i < arr2.length; i++)
+                {
+                    flag = true;
+                    for(var j = 0; j < arr1.length; j++)
+                    {
+                        if (arr1[j] == arr2[i])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                    {
+                        arr3.push(arr2[i]);
+                    }
+                }
+                if (arr3.length == 0)
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br> Пустое множество";
+                } else
+                {
+                    document.getElementById("result").innerHTML = "Результаты расчёта: <br><br>" + arr3.join(", ");
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Операции с множествами</h1>
+        <form>
+            Множество A <input type = "text" id = "set1"><br>
+            <br>
+            Множество B <input type = "text" id = "set2"><br>
+            <br>
+            <input type = "button" onclick = "union(set1.value, set2.value)" value = "Объединение">
+            <input type = "button" onclick = "intersection(set1.value, set2.value)" value = "Пересечение">            
+            <input type = "button" onclick = "difference(set1.value, set2.value)" value = "Разность A \ B">
+            <input type = "button" onclick = "difference(set2.value, set1.value)" value = "Разность B \ A">
+            <input type = "button" onclick = "symmetric(set1.value, set2.value)" value = "Симметрическая разность"><br>
+            <br><br>
+            <div id = "result"></div>
+        </form>
+    </body>
+</html>
